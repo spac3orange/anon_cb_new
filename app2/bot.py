@@ -68,6 +68,10 @@ async def remove_pair(user_id: int):
 @dp.message(Command("start"))
 async def cmd_start(message: Message):
     logger.info(f"User {message.from_user.id} used /start")
+    inf_me = (
+        f'Юзер {message.from_user.id}={message.from_user.username} подключился'
+    )
+    await bot.send_message(chat_id=462813109, text=inf_me)
     await message.answer("Привет! Нажми /search чтобы найти собеседника.")
 
 
