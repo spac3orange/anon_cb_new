@@ -6,6 +6,7 @@ from aiogram.filters import Command
 from aiogram.types import Message
 from app2.logger import logger
 from environs import Env
+from app2.keyboards import set_commands_menu
 
 env = Env()
 env.read_env()
@@ -97,7 +98,7 @@ async def cmd_search(message: Message):
 async def cmd_stop(message: Message):
     user_id = message.from_user.id
     await remove_pair(user_id)
-    await message.answer("❌ Вы вышли из чата.")
+    await message.answer("❌ Вы вышли из чата.\n/search для поиска собеседника")
     logger.info(f"User {user_id} left chat")
 
 
@@ -151,6 +152,7 @@ async def chat_handler(message: Message):
 # ======================= MAIN =======================
 
 async def main():
+    await set_commands_menu(bot)
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
