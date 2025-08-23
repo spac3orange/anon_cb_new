@@ -1,0 +1,1 @@
+2025-08-19 00:07:05.925 | ERROR    | app.database.crud.methods:add_user:57 - Ошибка SQLAlchemy при работе с пользователем 462813109: Column expression, FROM clause, or other columns clause element expected, got <class 'app.database.models.User'>.

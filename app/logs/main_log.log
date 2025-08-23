@@ -1,0 +1,13 @@
+2025-08-18 23:44:33.359 | INFO     | __main__:start_params:15 - Bot started
+2025-08-18 23:46:30.386 | INFO     | __main__:start_params:15 - Bot started
+2025-08-18 23:55:49.085 | INFO     | __main__:start_params:15 - Bot started
+2025-08-18 23:55:49.148 | INFO     | app.database.loader:initialize_database:7 - Database initialized
+2025-08-19 00:05:09.782 | INFO     | __main__:start_params:15 - Bot started
+2025-08-19 00:05:09.838 | INFO     | app.database.loader:initialize_database:7 - Database initialized
+2025-08-19 00:05:13.425 | INFO     | app.database.crud.methods:add_user:40 - [ERROR] Ошибка при добавлении/обновлении пользователя: Column expression, FROM clause, or other columns clause element expected, got <class 'app.database.models.User'>.
+2025-08-19 00:07:02.147 | INFO     | __main__:start_params:15 - Bot started
+2025-08-19 00:07:02.194 | INFO     | app.database.loader:initialize_database:7 - Database initialized
+2025-08-19 00:07:05.925 | ERROR    | app.database.crud.methods:add_user:57 - Ошибка SQLAlchemy при работе с пользователем 462813109: Column expression, FROM clause, or other columns clause element expected, got <class 'app.database.models.User'>.
+2025-08-19 00:08:59.555 | INFO     | __main__:start_params:15 - Bot started
+2025-08-19 00:08:59.618 | INFO     | app.database.loader:initialize_database:7 - Database initialized
+2025-08-19 00:09:05.365 | INFO     | app.database.crud.methods:add_user:44 - Новый пользователь добавлен: user_id=462813109, username=h3xmode
