@@ -112,7 +112,8 @@ async def cmd_search(message: Message):
 async def cmd_stop(message: Message):
     user_id = message.from_user.id
     await remove_pair(user_id)
-    await message.answer("❌ Вы вышли из чата.\n/search для поиска собеседника")
+    await message.answer("❌ Вы вышли из чата."
+                         "\nЖми /search для поиска нового собеседника")
     logger.info(f"User {user_id} left chat")
 
 
