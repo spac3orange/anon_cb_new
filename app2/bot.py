@@ -81,12 +81,24 @@ async def cmd_search(message: Message):
     user_id = message.from_user.id
     logger.info(f"User {user_id} used /search")
 
+    # Проверяем, есть ли текущий собеседник
+    partner = await get_pair(user_id)
+    if partner:
+        # Уведомляем обоих, что чат завершён
+        await bot.send_message(partner, "❌ Ваш собеседник завершил диалог."
+                                        "\n /search для поиска нового собеседника")
+        await message.answer("❌ Диалог завершён."
+                             "\n ⏳ Поиск нового собеседника...")
+        await remove_pair(user_id)
+        logger.info(f"Chat closed: {user_id} <-> {partner}")
+
+    # Берём следующего из очереди
     other_user = await get_from_queue()
 
     if other_user:
         await set_pair(user_id, int(other_user))
-        await message.answer("✅ Собеседник найден! Пишите сообщение.")
-        await bot.send_message(int(other_user), "✅ Собеседник найден! Пишите сообщение.")
+        await message.answer("✅ Собеседник найден! Можете начать общение.")
+        await bot.send_message(int(other_user), "✅ Собеседник найден! Можете начать общение.")
         logger.info(f"Pair created: {user_id} <-> {other_user}")
     else:
         await add_to_queue(user_id)
