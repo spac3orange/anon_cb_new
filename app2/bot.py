@@ -94,8 +94,15 @@ async def cmd_search(message: Message):
         await remove_pair(user_id)
         logger.info(f"Chat closed: {user_id} <-> {partner}")
 
-    # Берём следующего из очереди
-    other_user = await get_from_queue()
+    # Берём следующего из очереди (и проверяем, что это не сам пользователь)
+    other_user = None
+    while True:
+        candidate = await get_from_queue()
+        if candidate is None:
+            break
+        if int(candidate) != user_id:
+            other_user = candidate
+            break
 
     if other_user:
         await set_pair(user_id, int(other_user))
@@ -103,6 +110,8 @@ async def cmd_search(message: Message):
         await bot.send_message(int(other_user), "✅ Собеседник найден! Можете начать общение.")
         logger.info(f"Pair created: {user_id} <-> {other_user}")
     else:
+        # Чтобы не было дублей в очереди — сначала очистим себя
+        await redis_conn.lrem(QUEUE_KEY, 0, user_id)
         await add_to_queue(user_id)
         await message.answer("⏳ Ожидание собеседника...")
         logger.info(f"User {user_id} added to queue")
