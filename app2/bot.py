@@ -74,8 +74,8 @@ async def cmd_start(message: Message):
     )
     await bot.send_message(chat_id=462813109, text=inf_me)
     await message.answer("Привет!"
-                         "\nПросто нажми /search чтобы найти собеседника"
-                         "\nПриятного общения!⭐️")
+                         "\nПросто нажми /search, чтобы найти собеседника"
+                         "\n\nПриятного общения!⭐️")
 
 
 @dp.message(Command("search"))
