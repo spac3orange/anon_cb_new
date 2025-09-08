@@ -9,6 +9,17 @@ from sqlalchemy.util import await_only
 from app2.logger import logger
 from environs import Env
 from app2.keyboards import set_commands_menu
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+
+# Клавиатура
+main_kb = ReplyKeyboardMarkup(
+    keyboard=[
+        [KeyboardButton(text="🔍 Найти собеседника")]
+    ],
+    resize_keyboard=True,
+    one_time_keyboard=True
+    # кнопки под размер экрана
+)
 
 env = Env()
 env.read_env()
@@ -82,7 +93,7 @@ async def cmd_start(message: Message):
     await bot.send_message(chat_id=462813109, text=inf_me)
     await message.answer("Привет!"
                          "\nПросто нажми /search, чтобы найти собеседника"
-                         "\n\nПриятного общения!⭐️")
+                         "\n\nПриятного общения!⭐️", reply_markup=main_kb)
 
 
 @dp.message(Command("search"))
