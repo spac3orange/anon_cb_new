@@ -65,12 +65,11 @@ async def remove_pair(user_id: int):
         await redis_conn.delete(f"{PAIR_KEY_PREFIX}{partner}")
     await redis_conn.delete(f"{PAIR_KEY_PREFIX}{user_id}")
 
+
 async def is_in_queue(user_id: int) -> bool:
-    """
-    Проверяет, находится ли пользователь в очереди.
-    """
-    queue = await redis_conn.lrange(QUEUE_KEY, 0, -1)  # получаем всех
-    return user_id in queue
+    queue = await redis_conn.lrange(QUEUE_KEY, 0, -1)
+    return str(user_id).encode() in queue
+
 
 
 # ======================= ХЕНДЛЕРЫ =======================
@@ -195,5 +194,5 @@ async def main():
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
-    asyncio.run(main())
     logger.info('Bot started')
+    asyncio.run(main())
