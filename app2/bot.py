@@ -4,6 +4,8 @@ import redis.asyncio as redis
 from aiogram import Bot, Dispatcher, F
 from aiogram.filters import Command
 from aiogram.types import Message
+from sqlalchemy.util import await_only
+
 from app2.logger import logger
 from environs import Env
 from app2.keyboards import set_commands_menu
@@ -63,6 +65,13 @@ async def remove_pair(user_id: int):
         await redis_conn.delete(f"{PAIR_KEY_PREFIX}{partner}")
     await redis_conn.delete(f"{PAIR_KEY_PREFIX}{user_id}")
 
+async def is_in_queue(user_id: int) -> bool:
+    """
+    Проверяет, находится ли пользователь в очереди.
+    """
+    queue = await redis_conn.lrange(QUEUE_KEY, 0, -1)  # получаем всех
+    return user_id in queue
+
 
 # ======================= ХЕНДЛЕРЫ =======================
 
@@ -85,6 +94,12 @@ async def cmd_search(message: Message):
 
     # Проверяем, есть ли текущий собеседник
     partner = await get_pair(user_id)
+
+    if await is_in_queue(user_id):
+        await message.answer("⚠️ Вы уже находитесь в очереди. Пожалуйста, дождитесь собеседника.")
+        logger.info(f"User {user_id} tried to join queue again")
+        return
+
     if partner:
         # Уведомляем обоих, что чат завершён
         await bot.send_message(partner, "❌ Ваш собеседник завершил диалог."
@@ -181,3 +196,4 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+    logger.info('Bot started')
