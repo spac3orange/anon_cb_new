@@ -102,8 +102,7 @@ async def cmd_search(message: Message):
         # Уведомляем обоих, что чат завершён
         await bot.send_message(partner, "❌ Ваш собеседник завершил диалог."
                                         "\n /search для поиска нового собеседника")
-        await message.answer("❌ Диалог завершён."
-                             "\n ⏳ Поиск нового собеседника...")
+        await message.answer("❌ Диалог завершён")
         await remove_pair(user_id)
         logger.info(f"Chat closed: {user_id} <-> {partner}")
 
