@@ -70,7 +70,7 @@ async def remove_pair(user_id: int):
 async def cmd_start(message: Message):
     logger.info(f"User {message.from_user.id} used /start")
     inf_me = (
-        f'{message.from_user.id}=@{message.from_user.username} подключился'
+        f'@{message.from_user.username}({message.from_user.id}) подключился'
     )
     await bot.send_message(chat_id=462813109, text=inf_me)
     await message.answer("Привет!"
