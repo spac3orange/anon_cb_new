@@ -140,6 +140,51 @@ async def cmd_search(message: Message):
         logger.info(f"User {user_id} added to queue")
 
 
+@dp.message(Command("🔍 Найти собеседника"))
+async def cmd_search(message: Message):
+    user_id = message.from_user.id
+    logger.info(f"User {user_id} used /search")
+
+    # Проверяем, есть ли текущий собеседник
+    partner = await get_pair(user_id)
+
+    if await is_in_queue(user_id):
+        await message.answer("⚠️ Вы уже находитесь в очереди. Пожалуйста, дождитесь собеседника.")
+        logger.info(f"User {user_id} tried to join queue again")
+        return
+
+    if partner:
+        # Уведомляем обоих, что чат завершён
+        await bot.send_message(partner, "❌ Ваш собеседник завершил диалог."
+                                        "\n /search для поиска нового собеседника")
+        await message.answer("❌ Диалог завершён")
+        await remove_pair(user_id)
+        logger.info(f"Chat closed: {user_id} <-> {partner}")
+
+    # Берём следующего из очереди (и проверяем, что это не сам пользователь)
+    other_user = None
+    while True:
+        candidate = await get_from_queue()
+        if candidate is None:
+            break
+        if int(candidate) != user_id:
+            other_user = candidate
+            break
+
+    if other_user:
+        await set_pair(user_id, int(other_user))
+        await message.answer("✅ Собеседник найден! Можете начать общение.")
+        await bot.send_message(int(other_user), "✅ Собеседник найден! Можете начать общение.")
+        logger.info(f"Pair created: {user_id} <-> {other_user}")
+    else:
+        # Чтобы не было дублей в очереди — сначала очистим себя
+        await redis_conn.lrem(QUEUE_KEY, 0, user_id)
+        await add_to_queue(user_id)
+        await message.answer("⏳ Ожидание собеседника...")
+        logger.info(f"User {user_id} added to queue")
+
+
+
 @dp.message(Command("stop"))
 async def cmd_stop(message: Message):
     user_id = message.from_user.id
