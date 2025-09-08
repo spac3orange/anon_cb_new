@@ -140,7 +140,7 @@ async def cmd_search(message: Message):
         logger.info(f"User {user_id} added to queue")
 
 
-@dp.message(Command("🔍 Найти собеседника"))
+@dp.message(F.text == "🔍 Найти собеседника")
 async def cmd_search(message: Message):
     user_id = message.from_user.id
     logger.info(f"User {user_id} used /search")
