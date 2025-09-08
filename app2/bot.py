@@ -68,8 +68,15 @@ async def remove_pair(user_id: int):
 
 async def is_in_queue(user_id: int) -> bool:
     queue = await redis_conn.lrange(QUEUE_KEY, 0, -1)
-    return str(user_id).encode() in queue
-
+    uid = str(user_id)
+    for q in queue:
+        if isinstance(q, bytes):
+            if q.decode() == uid:
+                return True
+        else:
+            if q == uid:
+                return True
+    return False
 
 
 # ======================= ХЕНДЛЕРЫ =======================
