@@ -194,13 +194,14 @@ async def cmd_stop(message: Message):
         await bot.send_message(
             partner,
             "❌ Ваш собеседник завершил диалог"
-            "\nНажмите /search, чтобы найти нового"
+            "\nНажмите /search, чтобы найти нового", reply_markup=main_kb
         )
 
     await remove_pair(user_id)
 
     await message.answer("❌ Вы вышли из чата."
-                         "\nЖми /search для поиска нового собеседника")
+                         "\nЖми /search для поиска нового собеседника",
+                         reply_markup=main_kb)
     logger.info(f"User {user_id} left chat")
 
 
