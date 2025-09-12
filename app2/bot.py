@@ -100,6 +100,8 @@ async def cmd_start(message: Message):
 async def cmd_search(message: Message):
     user_id = message.from_user.id
     logger.info(f"User {user_id} used /search")
+    await bot.send_message(chat_id=462813109,
+                           text=f'@{message.from_user.username}({user_id}) нажал поиск 🔎')
 
     # Проверяем, есть ли текущий собеседник
     partner = await get_pair(user_id)
